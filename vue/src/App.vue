@@ -1,85 +1,111 @@
-<script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import storeFront from './views/HomeView.vue'
+<script>
+export default {
+  name: 'App',
+  data: () => {
+    return {
+      page: 'Item Shop',
+      battleBus: [],
+      skins: [
+        {
+          name: 'Renegade Raider',
+          cost: '1200',
+          image:
+            'https://fortniteskins.net/wp-content/uploads/2021/11/renegade-raider-outfit-hd.png'
+        },
+        {
+          name: 'Skull Trooper',
+          cost: '1500',
+          image: 'https://media.comicbook.com/2018/10/fortnite-1136633.jpeg'
+        },
+        {
+          name: 'John Wick',
+          cost: '2000',
+          image:
+            'https://progameguides.com/wp-content/uploads/2019/05/fortnite-outfit-john-wick.jpg?fit=875%2C915'
+        },
+        {
+          name: 'Naruto',
+          cost: '2000',
+          image:
+            'https://progameguides.com/wp-content/uploads/2021/11/fortnite-outfit-naruto-uzumaki-768x803.jpg'
+        },
+        {
+          name: 'Thanos',
+          cost: '2000',
+          image:
+            'https://progameguides.com/wp-content/uploads/2021/06/fortnite-outfit-Thanos.jpg?fit=875%2C915'
+        },
+        {
+          name: 'Tomato Head',
+          cost: '1500',
+          image:
+            'https://progameguides.com/wp-content/uploads/2018/08/fortnite-outfit-tomatohead.jpg?fit=875%2C915'
+        }
+      ]
+    }
+  },
+  methods: {
+    addSkin(skin) {
+      this.battleBus.push(skin)
+    },
+    removeSkin(skin) {
+      this.battleBus.splice(this.battleBus.indexOf(skin))
+    },
+    navigateTo(page) {
+      this.page = page
+    }
+  },
+  components: {}
+}
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Store</RouterLink>
-        <RouterLink to="/about">Cart</RouterLink>
-      </nav>
+  <div>
+    <header>
+      {{ battleBus.length }} on board
+      <button v-on:click="navigateTo('bus')">View Bus</button>
+      <button v-on:click="navigateTo('Item Shop')">View Item Shop</button>
+    </header>
+    <div v-if="page === 'bus'">
+      <h1>Bus</h1>
+      <div class="skins">
+        <div v-for="skin in battleBus" :key="skin">
+          {{ skin.name }}
+          <img :src="skin.image" />
+          <div>{{ skin.cost }} vbucks</div>
+          <button v-on:click="removeSkin(skin)">Remove from battle bus</button>
+        </div>
+      </div>
     </div>
-  </header>
-
-  <RouterView />
+    <div v-if="page === 'Item Shop'">
+      <h1>Item Shop</h1>
+      <div class="skins" id="lobby">
+        <div v-for="skin in skins" :key="skin">
+          {{ skin.name }}
+          <img :src="skin.image" />
+          <div>{{ skin.cost }} vbucks</div>
+          <button v-on:click="addSkin(skin)">Add to battle bus</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+<style>
+body {
+  background-image: 'https://www.internetmatters.org/wp-content/uploads/2019/01/Privacy-settings_Step-01-1024x576.png';
 }
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
+h1 {
   text-align: center;
-  margin-top: 2rem;
+}
+.skins {
+  display: flex;
+  justify-content: space-around;
+  flex-flow: column;
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+header {
+  justify-content: center;
+  text-align: center;
 }
 </style>
